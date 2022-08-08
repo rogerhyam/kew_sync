@@ -1,0 +1,7 @@
+
+data/ipni/*
+data/wcvp/*
+data/diff.csv
+data/new.csv
+data/old.csv
+.DS_Store
