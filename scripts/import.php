@@ -116,6 +116,10 @@ while($line = fgetcsv($in, null, '|')){
 
     //print_r($line);
 
+    // cols 19 and 20 are the dates that need to have their timezones removed.
+    $line[19] = substr($line[19], 0, strpos($line[19], "+"));
+    $line[20] = substr($line[20], 0, strpos($line[20], "+"));
+
     $statement->bind_param("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
         $line[0],
         $line[1],
