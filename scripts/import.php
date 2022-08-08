@@ -4,7 +4,7 @@
 
 require_once('../config.php');
 
-$in = fopen('../data/ipni/ipniWebName_2022-06-09.csv', 'r');
+$in = fopen('../data/ipni/new.csv', 'r');
 
 // drop the header
 fgetcsv($in, null, '|');
