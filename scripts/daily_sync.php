@@ -145,6 +145,9 @@ while($line = fgetcsv($in, null, '|')){
     $line[19] = substr($line[19], 0, strpos($line[19], "+"));
     $line[20] = substr($line[20], 0, strpos($line[20], "+"));
 
+    // 61 is  publication_year_i which is now and integer
+    $line[61] = is_numeric($line[61]) ? $line[61] : null;
+
      $statement->bind_param("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
         $line[0],
         $line[1],
