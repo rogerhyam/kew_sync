@@ -60,7 +60,7 @@ CREATE TABLE `ipni` (
   `lookup_parent_id` text,
   `publication_s_lower` text,
   `lookup_publication_id` text,
-  `publication_year_i` text,
+  `publication_year_i` int DEFAULT NULL,
   `publication_year_full_s_lower` text,
   `publication_year_note_s_lower` text,
   `publishing_author_s_lower` text,
@@ -93,5 +93,7 @@ CREATE TABLE `ipni` (
   `family_taxon_name_sortable` text,
   KEY `created` (`date_created_date`) USING BTREE,
   KEY `modified` (`date_last_modified_date`) USING BTREE,
-  KEY `id` (`id`) USING BTREE
+  KEY `id` (`id`) USING BTREE,
+  KEY `year` (`publication_year_i`) USING BTREE
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
