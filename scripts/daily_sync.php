@@ -37,7 +37,7 @@ exec("unxz $downloaded_file_path");
 
 // we will import it into a new table
 $mysqli->query("DROP TABLE IF EXISTS `ipni_new`;");
-$create_sql = file_get_contents('../sql/create.sql');
+$create_sql = file_get_contents('../sql/ipni.sql');
 $mysqli->query($create_sql);
 
 // now for importing it to the db.
