@@ -1,4 +1,4 @@
-CREATE TABLE `ipni` (
+CREATE TABLE `ipni_new` (
   `id` varchar(50) DEFAULT NULL,
   `authors_t` text,
   `basionym_s_lower` text,

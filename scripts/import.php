@@ -4,7 +4,7 @@
 
 require_once('../config.php');
 
-$in = fopen('../data/ipni/new.csv', 'r');
+$in = fopen('../data/ipni/ipniWebName.csv', 'r');
 
 // drop the header
 fgetcsv($in, null, '|');
@@ -119,6 +119,9 @@ while($line = fgetcsv($in, null, '|')){
     // cols 19 and 20 are the dates that need to have their timezones removed.
     $line[19] = substr($line[19], 0, strpos($line[19], "+"));
     $line[20] = substr($line[20], 0, strpos($line[20], "+"));
+
+    // 61 is  publication_year_i which is now and integer
+    $line[61] = is_numeric($line[61]) ? $line[61] : null;
 
     $statement->bind_param("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
         $line[0],

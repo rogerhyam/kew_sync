@@ -8,7 +8,6 @@ require_once('../config.php');
 
 $new_file_path = '../data/ipni/new.csv';
 $old_file_path = '../data/ipni/old.csv';
-$diff_file_path = '../data/ipni/diff.csv';
 $ipni_dump_uri = 'https://storage.googleapis.com/ipni-data/ipniWebName.csv.xz';
 
 // make the new file the old file so we can down load a new new file.
@@ -20,24 +19,20 @@ if(file_exists($new_file_path)){
     unlink($new_file_path);
 }
 
-if(!file_exists($old_file_path)){
-    echo "\n$old_file_path does not exist so nothing to compare new file to.";
-    exit;
-}
-
 # download the new one as new.csv
 echo "\nDownloading now...";
 $downloaded_file_path = $new_file_path . ".xz";
 file_put_contents($downloaded_file_path, fopen($ipni_dump_uri , 'r'));
-
 exec("unxz $downloaded_file_path");
 
-exec("diff --old-line-format='' --unchanged-line-format='' --new-line-format='%L' $old_file_path $new_file_path > $diff_file_path");
+// we will import it into a new table
+$mysqli->query("DROP TABLE IF EXISTS `ipni_new`;");
+$create_sql = file_get_contents('../sql/create.sql');
+$mysqli->query($create_sql);
 
 // now for importing it to the db.
-
 $statement =  $mysqli->prepare("
-    INSERT INTO `ipni`
+    INSERT INTO `ipni_new`
     (
         `id`,
         `authors_t`,
@@ -136,9 +131,12 @@ $statement =  $mysqli->prepare("
     );
 ");
 
-
 $count = 0;
-$in = fopen($diff_file_path, 'r');
+$in = fopen($new_file_path, 'r');
+
+// drop the header
+fgetcsv($in, null, '|');
+
 while($line = fgetcsv($in, null, '|')){
 
     // cols 19 and 20 are the dates that need to have their timezones removed.
@@ -256,16 +254,24 @@ while($line = fgetcsv($in, null, '|')){
 }
 fclose($in);
 
+// switch over the tables
+$response = $mysqli->query("SELECT count(*) as n FROM `ipni`;");
+$rows = $response->fetch_all(MYSQLI_ASSOC);
+$old_count = $rows[0]['n'];
 
+$response = $mysqli->query("SELECT count(*) as n FROM `ipni_new`;");
+$rows = $response->fetch_all(MYSQLI_ASSOC);
+$new_count = $rows[0]['n'];
 
-
-
-
-# delete diff.csv if it exists
-
-# diff the old.csv to new.csv  > diff.csv
-
-# run the php importer on the diff.csv file
-
+$now = new DateTime();
+$now = $now->format('Y-m-d H:i:s');
+// we only switch if we have more rows
+if($new_count >= $old_count){
+    $mysqli->query("DROP TABLE IF EXISTS `ipni`;");
+    $mysqli->query("RENAME TABLE `ipni_new` to `ipni`;");
+    file_put_contents('../data/ipni/message.txt', "New row count ($new_count) is less than old count ($old_count) so database not switched @ $now");
+}else{
+    file_put_contents('../data/ipni/message.txt', "New row count ($new_count) is less than old count ($old_count) so database NOT switched @ $now");
+}
 
 
