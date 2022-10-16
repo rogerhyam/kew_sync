@@ -22,12 +22,22 @@ if(file_exists($new_file_path)){
 # download the new one as new.csv
 echo "\nDownloading now...";
 $downloaded_file_path = $new_file_path . ".xz";
-file_put_contents($downloaded_file_path, fopen($ipni_dump_uri , 'r'));
+
+$stream = @fopen($ipni_dump_uri , 'r');
+if($stream === false){
+    //(error_get_last());
+    $message = $mysqli->real_escape_string('Caught exception whilst downloading: ' .  implode( "<br/>" , error_get_last())  . "<br/>" . $ipni_dump_uri ."\n");
+    $mysqli->query("INSERT INTO `ipni_log` (`message`) VALUES ('$message')");
+    echo "\n$message";
+    exit; 
+}
+file_put_contents($downloaded_file_path, $stream);
 exec("unxz $downloaded_file_path");
+
 
 // we will import it into a new table
 $mysqli->query("DROP TABLE IF EXISTS `ipni_new`;");
-$create_sql = file_get_contents('../sql/create.sql');
+$create_sql = file_get_contents('../sql/ipni.sql');
 $mysqli->query($create_sql);
 
 // now for importing it to the db.
@@ -263,15 +273,13 @@ $response = $mysqli->query("SELECT count(*) as n FROM `ipni_new`;");
 $rows = $response->fetch_all(MYSQLI_ASSOC);
 $new_count = $rows[0]['n'];
 
-$now = new DateTime();
-$now = $now->format('Y-m-d H:i:s');
 // we only switch if we have more rows
 if($new_count >= $old_count){
     $mysqli->query("DROP TABLE IF EXISTS `ipni`;");
     $mysqli->query("RENAME TABLE `ipni_new` to `ipni`;");
-    file_put_contents('../data/ipni/message.txt', "New row count ($new_count) is less than old count ($old_count) so database not switched @ $now");
+    $mysqli->query("INSERT INTO `ipni_log` (`message`) VALUES ('New row count ($new_count) is >= to old count ($old_count) so database switched.')");
 }else{
-    file_put_contents('../data/ipni/message.txt', "New row count ($new_count) is less than old count ($old_count) so database NOT switched @ $now");
+    $mysqli->query("INSERT INTO `ipni_log` (`message`) VALUES ('New row count ($new_count) is less than old count ($old_count) so database NOT switched.')");
 }
 
 
