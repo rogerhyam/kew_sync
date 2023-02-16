@@ -1,13 +1,13 @@
 CREATE TABLE `wcvp_new` (
-`plant_name_id` int(6) DEFAULT NULL,
+`plant_name_id` int(6) NOT NULL PRIMARY KEY,
 `ipni_id` varchar(20),
 `taxon_rank` text,
 `taxon_status` text,
-`family` text,
+`family` varchar(35),
 `genus_hybrid` text,
-`genus` text,
+`genus` varchar(35),
 `species_hybrid` text,
-`species` text,
+`species` varchar(35),
 `infraspecific_rank` text,
 `infraspecies` text,
 `parenthetical_author` text,
@@ -30,6 +30,9 @@ CREATE TABLE `wcvp_new` (
 `powo_id` text,
 `hybrid_formula` text,
 `reviewed` text,
-  KEY `plant_name_id` (`plant_name_id`) USING BTREE
-
+`hash` varchar(32),
+  KEY `family` (`family`) USING BTREE,
+  KEY `genus` (`genus`) USING BTREE,
+  KEY `species` (`species`) USING BTREE,
+  KEY `hash` (`hash`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

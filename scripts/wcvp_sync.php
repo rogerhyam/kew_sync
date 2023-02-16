@@ -57,8 +57,10 @@ $statement =  $mysqli->prepare("
         `parent_plant_name_id`,
         `powo_id`,
         `hybrid_formula`,
-        `reviewed`
+        `reviewed`,
+        `hash`
     ) VALUES (
+        ?,
         ?,
         ?,
         ?,
@@ -100,11 +102,15 @@ $zip->open(realpath($downloaded_file_path));
 $in = $zip->getStream('wcvp_names.csv');
 
 // drop the header
+echo "\nDropping header";
 fgetcsv($in, null, '|', 0x00, 0x00);
 
+echo "\nProcessing lines";
 while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
 
-     $statement->bind_param("sssssssssssssssssssssssssssssss",
+    $hash = md5(implode('|', $line));
+
+     $statement->bind_param("ssssssssssssssssssssssssssssssss",
         $line[0],
         $line[1],
         $line[2],
@@ -135,7 +141,8 @@ while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
         $line[27],
         $line[28],
         $line[29],
-        $line[30]
+        $line[30],
+        $hash
     );
 
     $statement->execute();
@@ -148,15 +155,24 @@ while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
 
     $count++;
 
+    // display count
+    if($count % 10000 == 0){    
+        echo "\n\t" . number_format($count, 0);
+        break; // debugging
+    } 
+
+
 }
 $zip->close();
 
-/*
-
 // switch over the tables
 $response = $mysqli->query("SELECT count(*) as n FROM `wcvp`;");
-$rows = $response->fetch_all(MYSQLI_ASSOC);
-$old_count = $rows[0]['n'];
+if($response){
+    $rows = $response->fetch_all(MYSQLI_ASSOC);
+    $old_count = $rows[0]['n'];
+}else{
+    $old_count = 0;
+}
 
 $response = $mysqli->query("SELECT count(*) as n FROM `wcvp_new`;");
 $rows = $response->fetch_all(MYSQLI_ASSOC);
@@ -164,10 +180,12 @@ $new_count = $rows[0]['n'];
 
 // we only switch if we have more rows
 if($new_count >= $old_count){
-    $mysqli->query("RENAME TABLE IF EXISTS `wcvp` to `wcvp_old`;");
+    echo "\nSwitching tables;";
+    $mysqli->query("DROP TABLE IF EXISTS `wcvp_last`;");
+    $mysqli->query("RENAME TABLE  `wcvp` to `wcvp_last`;");
     $mysqli->query("RENAME TABLE `wcvp_new` to `wcvp`;");
     $mysqli->query("INSERT INTO `wcvp_log` (`message`) VALUES ('New row count ($new_count) is >= to old count ($old_count) so database switched.')");
 }else{
+    echo "\nNew table is smaller - NOT SWITCHING";
     $mysqli->query("INSERT INTO `wcvp_log` (`message`) VALUES ('New row count ($new_count) is less than old count ($old_count) so database NOT switched.')");
 }
-*/
