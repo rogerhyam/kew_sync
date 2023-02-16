@@ -3,6 +3,13 @@
 // configuration variables used across the scripts and applications
 include_once("../../kew_secrets.php");
 
+
+// ipni download is set to this which has been working for a while
+define('KEW_SYNC_IPNI_URI', 'https://storage.googleapis.com/ipni-data/ipniWebName.csv.xz');
+
+// here is the wcvp download location
+define('KEW_SYNC_WCVP_URI', 'http://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip');
+
 // create and initialise the database connection
 $mysqli = new mysqli($db_host, $db_user, $db_password, $db_database);  
 

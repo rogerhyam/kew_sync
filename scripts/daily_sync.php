@@ -8,7 +8,7 @@ require_once('../config.php');
 
 $new_file_path = '../data/ipni/new.csv';
 $old_file_path = '../data/ipni/old.csv';
-$ipni_dump_uri = 'https://storage.googleapis.com/ipni-data/ipniWebName.csv.xz';
+$ipni_dump_uri = KEW_SYNC_IPNI_URI;
 
 // make the new file the old file so we can down load a new new file.
 if(file_exists($new_file_path)){

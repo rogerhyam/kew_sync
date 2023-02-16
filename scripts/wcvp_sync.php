@@ -3,7 +3,7 @@
 require_once('../config.php');
 
 $downloaded_file_path = "../data/wcvp/new.zip";
-$wcvp_uri = 'http://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip';
+$wcvp_uri = KEW_SYNC_WCVP_URI;
 
 # download the new one as new.csv
 echo "\nDownloading now...";
@@ -158,9 +158,7 @@ while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
     // display count
     if($count % 10000 == 0){    
         echo "\n\t" . number_format($count, 0);
-        break; // debugging
     } 
-
 
 }
 $zip->close();
