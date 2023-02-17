@@ -27,6 +27,7 @@ $mysqli->query($create_sql);
 $statement =  $mysqli->prepare("
     INSERT INTO `wcvp_new`
     (
+        `wfo_id`,
         `plant_name_id`,
         `ipni_id`,
         `taxon_rank`,
@@ -91,6 +92,7 @@ $statement =  $mysqli->prepare("
         ?,
         ?,
         ?,
+        ?,
         ?
     );
 ");
@@ -109,8 +111,10 @@ echo "\nProcessing lines";
 while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
 
     $hash = md5(implode('|', $line));
+    $wfo_id = null;
 
-     $statement->bind_param("ssssssssssssssssssssssssssssssss",
+     $statement->bind_param("sssssssssssssssssssssssssssssssss",
+        $wfo_id,
         $line[0],
         $line[1],
         $line[2],
@@ -158,6 +162,7 @@ while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
     // display count
     if($count % 10000 == 0){    
         echo "\n\t" . number_format($count, 0);
+        //break; // debug
     } 
 
 }

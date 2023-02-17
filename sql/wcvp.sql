@@ -1,4 +1,5 @@
 CREATE TABLE `wcvp_new` (
+`wfo_id` varchar(14) DEFAULT NULL,
 `plant_name_id` int(6) NOT NULL PRIMARY KEY,
 `ipni_id` varchar(20),
 `taxon_rank` text,
@@ -7,7 +8,7 @@ CREATE TABLE `wcvp_new` (
 `genus_hybrid` text,
 `genus` varchar(35),
 `species_hybrid` text,
-`species` varchar(35),
+`species` varchar(45),
 `infraspecific_rank` text,
 `infraspecies` text,
 `parenthetical_author` text,
@@ -31,6 +32,7 @@ CREATE TABLE `wcvp_new` (
 `hybrid_formula` text,
 `reviewed` text,
 `hash` varchar(32),
+  KEY `wfo_id` (`wfo_id`) USING BTREE,
   KEY `family` (`family`) USING BTREE,
   KEY `genus` (`genus`) USING BTREE,
   KEY `species` (`species`) USING BTREE,

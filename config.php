@@ -10,6 +10,9 @@ define('KEW_SYNC_IPNI_URI', 'https://storage.googleapis.com/ipni-data/ipniWebNam
 // here is the wcvp download location
 define('KEW_SYNC_WCVP_URI', 'http://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip');
 
+// where the matching URL is
+define('KEW_SYNC_GRAPHQL_URI', 'https://list-dev.rbge.info/gql.php');
+
 // create and initialise the database connection
 $mysqli = new mysqli($db_host, $db_user, $db_password, $db_database);  
 
