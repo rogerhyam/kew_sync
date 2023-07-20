@@ -8,13 +8,14 @@ create table kew.ipni_doi SELECT
     taxon_scientific_name_s_lower, 
     authors_t, 
     REGEXP_SUBSTR(remarks_s_lower, 'doi:10\.[0-9]{4,9}/[^ ]*') as doi,
-    remarks_s_lower
+    remarks_s_lower,
+	null as apa_citation,
+    null as response_code
 FROM 
 	kew.ipni 
 where
 	remarks_s_lower
 like '%doi:%';
-
 */
 
 // get a list of all
