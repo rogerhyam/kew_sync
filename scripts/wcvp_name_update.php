@@ -59,14 +59,14 @@ while(true){
             query {
                 taxonNameMatch(inputString: \"$name_string\"){
                     match{
-                    wfoId
+                    id
                     identifiersOther {
                         kind
                         value
                     }
                     }
                     candidates{
-                    wfoId
+                    id
                     identifiersOther {
                         kind
                         value
@@ -87,12 +87,13 @@ while(true){
         if(!$curl_error){
             // no error
             $match_response = json_decode($curl_response);
+
             $match = $match_response->data->taxonNameMatch->match;
             $candidates = $match_response->data->taxonNameMatch->candidates;
 
             if($match){
                 // straight match so just set it
-                $wfo_id = $match->wfoId;
+                $wfo_id = $match->id;
             }else{
                 // no straight match so work through the candidates.
                 if($row['ipni_id']){
@@ -104,7 +105,7 @@ while(true){
                     foreach($candidates as $candidate){
                         foreach($candidate->identifiersOther as $identifier){
                             if($identifier->kind == 'ipni' && $identifier->value == $ipni_id){
-                               $wfo_id = $candidate->wfoId;
+                               $wfo_id = $candidate->id;
                                break; 
                             }
                         }

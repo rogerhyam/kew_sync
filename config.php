@@ -3,7 +3,6 @@
 // configuration variables used across the scripts and applications
 include_once("../../kew_secrets.php");
 
-
 // ipni download is set to this which has been working for a while
 define('KEW_SYNC_IPNI_URI', 'https://storage.googleapis.com/ipni-data/ipniWebName.csv.xz');
 
