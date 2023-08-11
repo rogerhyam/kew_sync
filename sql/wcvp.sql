@@ -36,5 +36,8 @@ CREATE TABLE `wcvp_new` (
   KEY `family` (`family`) USING BTREE,
   KEY `genus` (`genus`) USING BTREE,
   KEY `species` (`species`) USING BTREE,
-  KEY `hash` (`hash`) USING BTREE
+  KEY `hash` (`hash`) USING BTREE,
+  KEY `status` (`taxon_status`) USING BTREE,
+  KEY `ipni` (`ipni_id`) USING BTREE,
+  KEY `plant_name_id` (`plant_name_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
