@@ -35,9 +35,12 @@ function convert_table($table_name){
 
 
         if($response->num_rows == 0){
+            echo "No rows so breaking";
             break;
         }else{
-            $offset .= 10000;
+            echo "\n{$response->num_rows} rows to process";
+            $offset = $offset + 10000;
+            echo "\tIncrease offset to {$offset}";
         }
 
         $rows = $response->fetch_all(MYSQLI_ASSOC);
@@ -58,7 +61,7 @@ function convert_table($table_name){
             $hash_array[] = $row['taxon_status'];
             $hash = md5(implode('|', $hash_array));
 
-            echo "\n{$row['plant_name_id']}\t$hash";
+            // echo "\n{$row['plant_name_id']}\t$hash";
 
             $mysqli->query("UPDATE $table_name SET `hash` = '$hash' WHERE plant_name_id = {$row['plant_name_id']}" );
 
