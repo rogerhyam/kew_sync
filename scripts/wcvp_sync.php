@@ -110,7 +110,24 @@ fgetcsv($in, null, '|', 0x00, 0x00);
 echo "\nProcessing lines";
 while($line = fgetcsv($in, null, '|', 0x00, 0x00)){
 
-    $hash = md5(implode('|', $line));
+/*
+    Fields we are interested in spotting changes in
+*/
+
+    $hash_array = array();
+    $hash_array[] = $line[22]; // taxon_authors
+    $hash_array[] = $line[14]; // place_of_publication
+    $hash_array[] = $line[15]; // volume_and_page
+    $hash_array[] = $line[16]; // first_published
+    $hash_array[] = $line[23]; // accepted_plant_name_id
+    $hash_array[] = $line[24]; // basionym_plant_name_id
+    $hash_array[] = $line[27]; // parent_plant_name_id
+    $hash_array[] = $line[17]; // nomenclatural_remarks
+    $hash_array[] = $line[3]; // taxon_status
+    $hash = md5(implode('|', $hash_array));
+
+    // $hash = md5(implode('|', $line));
+    
     $wfo_id = null;
 
      $statement->bind_param("sssssssssssssssssssssssssssssssss",
