@@ -96,4 +96,4 @@ CREATE TABLE `ipni_new` (
   KEY `id` (`id`) USING BTREE,
   KEY `year` (`publication_year_i`) USING BTREE
 
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

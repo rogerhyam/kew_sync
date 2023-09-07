@@ -2,24 +2,8 @@
 
 require_once('../config.php');
 
-/*
-create table kew.ipni_doi SELECT 
-	id,
-    taxon_scientific_name_s_lower, 
-    authors_t, 
-    REGEXP_SUBSTR(remarks_s_lower, 'doi:10\.[0-9]{4,9}/[^ ]*') as doi,
-    remarks_s_lower,
-	null as apa_citation,
-    null as response_code
-FROM 
-	kew.ipni 
-where
-	remarks_s_lower
-like '%doi:%';
-*/
-
 // get a list of all
-$response = $mysqli->query("SELECT distinct(doi) FROM kew.ipni_doi where apa_citation is null;");
+$response = $mysqli->query("SELECT distinct(doi) FROM kew.rod_dois where citation_full is null;");
 $rows = $response->fetch_all(MYSQLI_ASSOC);
 $response->close();
 
@@ -28,7 +12,7 @@ foreach($rows as $row){
     $doi = $row['doi'];
     if(!$doi) continue;
 
-    $uri = preg_replace('/^doi:/', 'https://doi.org/', $doi );
+    $uri = $doi; // no conversion needed here
 
     // curl -LH "Accept: text/x-bibliography; style=apa" https://doi.org/10.9735/0976-9889.5.1.35-38
     $ch = curl_init($uri);
@@ -48,7 +32,7 @@ foreach($rows as $row){
     curl_close($ch);
     $cite = $mysqli->real_escape_string($response);
     $doi_escaped = $mysqli->real_escape_string($doi);
-    $mysqli->query("UPDATE kew.ipni_doi SET response_code = $code, apa_citation = '$cite' where doi = '$doi_escaped'");
+    $mysqli->query("UPDATE kew.rod_dois SET response_code = $code, citation_full = '$cite' where doi = '$doi_escaped'");
     echo $mysqli->error;
     echo "\n-----\n";
     echo "$uri\t$code\n";
