@@ -281,5 +281,3 @@ if($new_count >= $old_count){
 }else{
     $mysqli->query("INSERT INTO `ipni_log` (`message`) VALUES ('New row count ($new_count) is less than old count ($old_count) so database NOT switched.')");
 }
-
-
