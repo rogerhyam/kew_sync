@@ -40,4 +40,4 @@ CREATE TABLE `wcvp_new` (
   KEY `status` (`taxon_status`) USING BTREE,
   KEY `ipni` (`ipni_id`) USING BTREE,
   KEY `plant_name_id` (`plant_name_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
