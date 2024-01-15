@@ -3,7 +3,7 @@ CREATE TABLE `wcvp_new` (
 `plant_name_id` int(6) NOT NULL PRIMARY KEY,
 `ipni_id` varchar(20),
 `taxon_rank` text,
-`taxon_status` text,
+`taxon_status` varchar(20),
 `family` varchar(35),
 `genus_hybrid` text,
 `genus` varchar(35),
