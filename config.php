@@ -10,7 +10,7 @@ define('KEW_SYNC_IPNI_URI', 'https://storage.googleapis.com/ipni-data/ipniWebNam
 define('KEW_SYNC_WCVP_URI', 'http://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip');
 
 // where the matching URL is
-define('KEW_SYNC_GRAPHQL_URI', 'https://list-dev.rbge.info/gql.php');
+define('KEW_SYNC_GRAPHQL_URI', 'https://rhakhis.rbge.info/gql.php');
 
 // create and initialise the database connection
 $mysqli = new mysqli($db_host, $db_user, $db_password, $db_database);  
@@ -23,5 +23,3 @@ if ($mysqli->connect_error) {
 if (!$mysqli->set_charset("utf8")) {
   echo printf("Error loading character set utf8: %s\n", $mysqli->error);
 }
-
-
