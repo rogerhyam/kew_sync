@@ -8,6 +8,7 @@ define('KEW_SYNC_IPNI_URI', 'https://storage.googleapis.com/ipni-data/ipniWebNam
 
 // here is the wcvp download location
 define('KEW_SYNC_WCVP_URI', 'http://sftp.kew.org/pub/data-repositories/WCVP/wcvp.zip');
+define('KEW_SYNC_WCVP_GEO_URI', 'https://sftp.kew.org/pub/data-repositories/WCVP/wcvp_dwca.zip');
 
 // where the matching URL is
 define('KEW_SYNC_GRAPHQL_URI', 'https://rhakhis.rbge.info/gql.php');
